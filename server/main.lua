@@ -1,3 +1,6 @@
+
+Players = Players or {}
+
 local function normalizeInput(v)
     return tostring(v):lower():gsub("%s+", "")
 end
@@ -7,77 +10,51 @@ local function checkTypeInput(dtype)
     return allowed[dtype] == true
 end
 
+function InitPlayer(playerId)
+    playerId = tonumber(playerId)
+    if not playerId or Players[playerId] then return end
+
+    local citizenid = GetCitizenid(playerId)
+    if not citizenid then return end
+
+    local row = Player.fetchFromDBByCitizenId(citizenid)
+    local dtype = (row and row.type) or 'none'
+
+    if dtype == 'none' then return end 
+
+    Players[playerId] = Player:new(playerId, citizenid, dtype, row and row.sugarlevel)
+end
+
+function RemovePlayer(playerId)
+    playerId = tonumber(playerId)
+    if not playerId then return end
+    Players[playerId] = nil
+end
 
 function SetPlayerDiabetes(playerId, dtype)
+    playerId = tonumber(playerId)
+    if not playerId then return end
+
     dtype = normalizeInput(dtype)
 
-    local citizenid = GetCitizenid(playerId)
-    if not citizenid then return end
-
-    if dtype == 'none' then
-        MySQL.update.await("DELETE FROM uc_diabetes WHERE citizenid = ?", { citizenid })
-        RemovePlayer(playerId)
-        return
+    if not checkTypeInput(dtype) then
+        return false, 'invalid_type'
     end
-
-    MySQL.insert.await([[
-        INSERT INTO uc_diabetes (citizenid, type)
-        VALUES (?, ?)
-        ON DUPLICATE KEY UPDATE type = VALUES(type)
-    ]], { citizenid, dtype })
-
-    if not Players[playerId] then
-        Players[playerId] = Player:new(playerId, citizenid, dtype)
-    else
-        Players[playerId]:setDiabetesTypeLocal(dtype)
-    end
-end
-
-
-
-function GetDiabetesType(playerId)
-    local citizenid = GetCitizenid(playerId)
-    if not citizenid then return "none" end
-
-    local row = MySQL.single.await('SELECT type FROM uc_diabetes WHERE citizenid = ?', { citizenid })
-    return (row and row.type) or "none"
-end
-
-
-function SetSugarLevel(playerId, sugarLevel)
-    local citizenid = GetCitizenid(playerId)
-    if not citizenid then return end
-
-    sugarLevel = tonumber(sugarLevel) or 50
-
-    MySQL.insert.await([[
-        INSERT INTO uc_diabetes (citizenid, sugarlevel)
-        VALUES (?, ?)
-        ON DUPLICATE KEY UPDATE sugarlevel = VALUES(sugarlevel)
-    ]], { citizenid, sugarLevel })
 
     if Players[playerId] then
-        Players[playerId]:setSugarLevelLocal(sugarLevel)
+        return Players[playerId]:setDiabetesType(dtype)
     end
-end
 
-function GetSugarLevel(playerId)
     local citizenid = GetCitizenid(playerId)
-    if not citizenid then return 50 end
+    if not citizenid then return false, 'no_citizenid' end
 
-    local row = MySQL.single.await('SELECT sugarlevel FROM uc_diabetes WHERE citizenid = ?', { citizenid })
-    return (row and row.sugarlevel) or 50
-end
-
-
-function GetSugarLevel(playerId)
-    local citizenid = GetCitizenid(playerId)
-    local response = MySQL.query.await('SELECT sugarlevel FROM uc_diabetes WHERE citizenid = ?', { citizenid })
-    if response[1] then
-        return response[1].sugarLevel
-    else
-        return false
+    if dtype == 'none' then
+        Player.deleteRowByCitizenId(citizenid)
+        return true
     end
+
+    Players[playerId] = Player:new(playerId, citizenid, dtype, 50)
+    return Players[playerId]:setDiabetesType(dtype)
 end
 
 lib.addCommand('setdiabetes', {
@@ -92,13 +69,17 @@ lib.addCommand('setdiabetes', {
     local dtype = normalizeInput(args.type)
 
     if not target or not dtype or not checkTypeInput(dtype) then
-        Notify(source, "UC-Diabetes", "Invalid type. Use none/type1/type2", "error")
+        Notify(source, 'UC-Diabetes', 'Invalid type. Use none/type1/type2', 'error')
         return
     end
 
-    SetPlayerDiabetes(target, dtype)
+    local ok, err = SetPlayerDiabetes(target, dtype)
+    if not ok then
+        Notify(source, 'UC-Diabetes', ('Failed to set diabetes (%s)'):format(err or 'unknown'), 'error')
+        return
+    end
 
-    Notify(source, "UC-Diabetes", ("Set diabetes type to %s for player ID %s"):format(dtype, target), "success")
+    Notify(source, 'UC-Diabetes', ('Set diabetes type to %s for player ID %s'):format(dtype, target), 'success')
 end)
 
 RegisterNetEvent('QBCore:Server:OnPlayerLoaded', function()
@@ -109,25 +90,6 @@ RegisterNetEvent('QBCore:Server:OnPlayerUnload', function()
     RemovePlayer(source)
 end)
 
-function InitPlayer(playerId)
-    if Players[playerId] then return end
-
-    local citizenid = GetCitizenid(playerId)
-    if not citizenid then return end
-
-    local dtype = GetDiabetesType(playerId) -- DB read
-    if dtype == 'none' then return end      -- only create objects for diabetics
-
-    Players[playerId] = Player:new(playerId, citizenid, dtype)
-end
-
-function RemovePlayer(playerId)
-    local p = Players[playerId]
-    if not p then return end
-
-    p.type = 'none'
-    Players[playerId] = nil
-end
 AddEventHandler('onResourceStart', function(resource)
     if resource ~= GetCurrentResourceName() then return end
 
@@ -136,11 +98,9 @@ AddEventHandler('onResourceStart', function(resource)
     end
 end)
 
-
-------CLASS INTERACTION------
 lib.callback.register('UC-diabetes:server:getDiabetesType', function(source)
-    return GetDiabetesType(source)
+    if Players[source] then
+        return Players[source]:getDiabetesType()
+    end
+    return 'none'
 end)
-
-
-
