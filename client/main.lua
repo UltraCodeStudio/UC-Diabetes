@@ -1,5 +1,5 @@
 Citizen.CreateThread(function()
-   Wait(1000)
+   Wait(2000)
    local type = lib.callback.await('UC-diabetes:server:getDiabetesType', source)
-   print(type)
+   print("Client "..type)
 end)
