@@ -29,8 +29,23 @@ function Player:constructor(source, citizenid, dtype, sugarLevel)
     self.citizenid = citizenid
     self.type = dtype or 'none'
     self.sugarLevel = tonumber(sugarLevel) or 50
-
     self:startSugarLoop()
+end
+
+function Player:useInsulin(amount)
+    if self.sugarLevel <= 0 then
+        Notify(self.source, 'UC-Diabetes', 'You are too low on sugar to use insulin.', 'error')
+        return
+    end
+    self:setSugarLevel(self.sugarLevel - amount)
+end
+
+function Player:useEnergyTablet(amount)
+    if self.sugarLevel >= 100 then
+        Notify(self.source, 'UC-Diabetes', 'You are already at maximum sugar level.', 'error')
+        return
+    end
+    self:setSugarLevel(self.sugarLevel + amount)
 end
 
 function Player:startSugarLoop()
@@ -40,6 +55,8 @@ function Player:startSugarLoop()
 
             if self.type ~= 'none' then
                 print(self.source .. " sugar=" .. tostring(self.sugarLevel) .. " type=" .. self.type)
+                local delta = (self.type == 'type1') and -2 or -1
+                self:setSugarLevel(self.sugarLevel + delta)
             end
         end
     end)
@@ -81,17 +98,13 @@ function Player:setDiabetesType(dtype)
     return true
 end
 
-function Player:setSugarLevel(level, persist)
+function Player:setSugarLevel(level)
     level = tonumber(level) or 50
 
     if level < 0 then level = 0 end
     if level > 100 then level = 100 end
 
     self.sugarLevel = level
-
-    if persist == false then
-        return true
-    end
 
     MySQL.insert.await([[
         INSERT INTO uc_diabetes (citizenid, sugarlevel)

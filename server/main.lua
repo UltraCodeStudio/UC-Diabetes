@@ -82,6 +82,49 @@ lib.addCommand('setdiabetes', {
     Notify(source, 'UC-Diabetes', ('Set diabetes type to %s for player ID %s'):format(dtype, target), 'success')
 end)
 
+lib.addCommand('useinsulin', {
+    help = 'Gives diabetes to a player',
+    params = {
+        { name = 'amount', type = 'number', help = 'Amount of insulin to use' },
+    },
+    restricted = 'group.admin'
+}, function(source, args)
+    if Players[source] then
+        return Players[source]:useInsulin(args.amount)
+    else
+        Notify(source, 'UC-Diabetes', 'You do not have diabetes.', 'error')
+    end
+end)
+
+lib.addCommand('useenergytablet', {
+    help = 'Gives diabetes to a player',
+    params = {
+        { name = 'amount', type = 'number', help = 'Amount of energy tablet to use' },
+    },
+    restricted = 'group.admin'
+}, function(source, args)
+    if Players[source] then
+        return Players[source]:useEnergyTablet(args.amount)
+    else
+        Notify(source, 'UC-Diabetes', 'You do not have diabetes.', 'error')
+    end
+end)
+
+lib.addCommand('monitorsugar', {
+    help = 'Gives diabetes to a player',
+    -- params = {
+    --     { name = 'amount', type = 'number', help = 'Amount of energy tablet to use' },
+    -- },
+    restricted = 'group.admin'
+}, function(source, args)
+    if Players[source] then
+        local sugarLevel = Players[source]:getSugarLevel()
+        Notify(source, 'UC-Diabetes', ('Your sugar level is %d'):format(sugarLevel), 'success')
+    else
+        Notify(source, 'UC-Diabetes', 'You do not have diabetes.', 'error')
+    end
+end)
+
 RegisterNetEvent('QBCore:Server:OnPlayerLoaded', function()
     InitPlayer(source)
 end)
