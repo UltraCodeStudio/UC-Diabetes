@@ -1,5 +1,17 @@
 Config = {}
 
+Config.Integrations = {
+    framework = "qbx", -- 'qbx' | 
+    inventory = "ox", -- 'ox' | 
+    notify = "ox", -- 'ox' | 
+}
+
+Config.ItemNames = {
+    insulinPen = "insulinpen",
+    energyTablet = "energytablet",
+    bloodSugarMonitor = "bloodsugarmonitor",
+}
+
 Config.items = {
     insulin = {
         sugarDecrease = 5.0, -- Decreases sugar level by 5

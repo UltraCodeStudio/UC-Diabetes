@@ -1,0 +1,27 @@
+["insulinpen"] = {
+        label = "Insulin Pen",
+        description = "Used to reduce sugar levels.",
+        weight = 20,
+        stack = true,
+        client = {
+            event = 'UC-diabetes:client:useInsulin',
+        }
+    },
+    ["energytablet"] = {
+        label = "Energy Tablet",
+        description = "Increases sugar levels.",
+        weight = 20,
+        stack = true,
+        client = {
+           event = 'UC-diabetes:client:useEnergyTablet',
+        }
+    },
+    ["bloodsugarmonitor"] = {
+        label = "Blood Sugar Monitor",
+        description = "Used to monitor sugar levels.",
+        weight = 20,
+        stack = true,
+        client = {
+           event = 'UC-diabetes:client:useBloodSugarMonitor',
+        }
+    },

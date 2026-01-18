@@ -37,6 +37,7 @@ function Player:useInsulin()
         Notify(self.source, 'UC-Diabetes', 'You are too low on sugar to use insulin.', 'error')
         return
     end
+    RemoveItem(Config.ItemNames.insulinPen, 1 ,self.source)
     TriggerClientEvent('UC-diabetes:client:playAnimation', self.source, Config.items.insulin.animation)
     self:setSugarLevel(self.sugarLevel - Config.items.insulin.sugarDecrease)
 end
@@ -46,6 +47,7 @@ function Player:useEnergyTablet()
         Notify(self.source, 'UC-Diabetes', 'You are already at maximum sugar level.', 'error')
         return
     end
+    RemoveItem(Config.ItemNames.energyTablet, 1 ,self.source)
     TriggerClientEvent('UC-diabetes:client:playAnimation', self.source, Config.items.energyTablet.animation)
     self:setSugarLevel(self.sugarLevel + Config.items.energyTablet.sugarIncrease)
 end
