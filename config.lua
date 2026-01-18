@@ -31,7 +31,6 @@ Config.items = {
     },
     bloodSugarMonitor = {
         animation = {
-            
             dict = "cellphone@",
             clip = "cellphone_text_in",
             duration = 1500,
@@ -47,13 +46,13 @@ Config.items = {
 }
 
 Config.Type1 = {
-    SugarDecreaseAmount = 1.5,
-    SugarDecreaseInterval = 0.1, -- Interval in minutes
+    SugarDecreaseAmount = 2.5,
+    SugarDecreaseInterval = 5, -- Interval in minutes
 }
 
 Config.Type2 = {
-    SugarDecreaseAmount = 1.0,
-    SugarDecreaseInterval = 10, -- Interval in minutes
+    SugarDecreaseAmount = 3.0,
+    SugarDecreaseInterval = 4, -- Interval in minutes
 }
 
 Config.Effects = {
@@ -62,7 +61,7 @@ Config.Effects = {
         screenEffect = "DrugsMichaelAliensFightIn",
         walkingSpeed = 0.3,
         animation = "MOVE_M@DRUNK@MODERATEDRUNK_HEAD_UP",
-        healthLoss = 2.0, -- Health loss per interval
+        healthLoss = 2.0,
 
     },
     lowSugar = {
@@ -70,6 +69,6 @@ Config.Effects = {
         screenEffect = "DrugsMichaelAliensFightIn",
         walkingSpeed = 0.3,
         animation = "MOVE_M@DRUNK@MODERATEDRUNK_HEAD_UP",
-        healthLoss = 2.0, -- Health loss per interval
+        healthLoss = 2.0,
     },
 }

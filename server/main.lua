@@ -91,7 +91,6 @@ RegisterNetEvent('UC-diabetes:server:useInsulin', function()
 end)
 
 RegisterNetEvent('UC-diabetes:server:useEnergyTablet', function()
-    print(source)
     if Players[source] then
         return Players[source]:useEnergyTablet()
     else

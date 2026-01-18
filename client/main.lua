@@ -63,14 +63,12 @@ local function setWalkingSpeed(start, speedMultiplier, animation)
     if not DoesEntityExist(ped) then return end
 
     if start then
-        -- Load and apply slow walking animation set
         RequestAnimSet(animation)
         while not HasAnimSetLoaded(animation) do
             Wait(0)
         end
         SetPedMovementClipset(ped, animation, 1.0)
     else
-        -- Reset back to normal
         ResetPedMovementClipset(ped, 0.0)
     end
 end
@@ -104,7 +102,6 @@ RegisterNetEvent('UC-diabetes:client:playSound', function(name, dict)
    PlaySound(name, dict)
 end)
 
---Effects
 RegisterNetEvent('UC-diabetes:client:applyScreenEffect', function(start, effectName)
     setScreenEffect(start, effectName, 0, true)
 end)
