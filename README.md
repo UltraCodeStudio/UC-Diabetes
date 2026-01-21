@@ -1,9 +1,9 @@
 # UC-Diabetes
 
-![](https://img.shields.io/github/downloads/UltraCodeStudio/UC-Diabetes/total?logo=github)
+![](https://img.shields.io/github/downloads/UltraCodeStudio/UC-Diabetes/downloads/total?logo=github)
 ![](https://img.shields.io/github/downloads/UltraCodeStudio/UC-Diabetes/latest/total?logo=github)
 ![](https://img.shields.io/github/contributors/UltraCodeStudio/UC-Diabetes?logo=github)
-![](https://img.shields.io/github/v/release/UltraCodeStudio/UC-Diabetes?logo=github) 
+![](https://img.shields.io/github/v/release/UltraCodeStudio/UC-Diabetes?logo=github)
 
 
 A Small script for players who want to RP with diabetes. Easily Configurable for different frameworks
