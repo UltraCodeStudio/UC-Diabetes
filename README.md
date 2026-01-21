@@ -14,7 +14,7 @@ COMING SOON
 
 ## 💾 Download
 
-https://github.com/UltraCodeStudio/UC-Diabetes/releases/latest/download/UC-Diabetes.zip
+https://github.com/UltraCodeStudio/UC-Diabetes/releases/latest/download
 
 ## ✨ Features
 
