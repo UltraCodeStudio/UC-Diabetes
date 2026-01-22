@@ -1,11 +1,5 @@
 # UC-Diabetes
 
-![](https://img.shields.io/github/downloads/UltraCodeStudio/UC-Diabetes/total?logo=github)
-![](https://img.shields.io/github/downloads/UltraCodeStudio/UC-Diabetes/latest/total?logo=github)
-![](https://img.shields.io/github/contributors/UltraCodeStudio/UC-Diabetes?logo=github)
-![](https://img.shields.io/github/v/release/UltraCodeStudio/UC-Diabetes?logo=github)
-
-
 A Small script for players who want to RP with diabetes. Easily Configurable for different frameworks
 
 ## 📚 Documentation
@@ -33,3 +27,6 @@ https://github.com/UltraCodeStudio/UC-Diabetes/releases/latest
 - Add the items into your inventory system also inside the INSTALL folder
 - Run the SQL file on your database also inside the INSTALL folder
 - add to your server.cfg 
+
+### If support is needed, join my Discord and open a ticket, and I'll be sure to help you out
+## [UltraCode Discord](https://discord.gg/9pCDHmjYwd)
